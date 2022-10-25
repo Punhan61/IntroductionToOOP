@@ -2,7 +2,7 @@
 using namespace std;
 
 #define tab "\t"
-
+#define delimiter "\n------------------------------------------------------------------\n"
 
 class Point
 {
@@ -27,31 +27,51 @@ public:
 	}
 
 	//       Constructors
-	Point()
+
+	/*Point()
 	{
 		x = y = double();
 		//double() - значение по умолчанию для типа double
 		cout << "Costructor:\t" << this << endl;
-	}
-	Point(double x)
+	}*/
+
+	/*Point(double x)
 	{
 		this->x = x;
 		this->y = 0;
 		cout << "1ArgConstructor:" << this << endl;
-	}
-	Point(double x, double y)
+	}*/
+
+	Point(double x=0, double y=0)
 	{
 		this->x = x;
 		this->y = y;
 		cout << "Costructor:\t" << this << endl;
 	}
+
+	Point(const Point& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		cout << "CopyConstructor:" << this << endl;
+	}
+
 	~Point()
 	{
 		cout << "Destructor:\t" << this << endl;
 	}
 
+	//              Operators
+	Point& operator=(const Point& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		cout << "CopyAssignment:\t" << this << endl;
+		return *this;
+	}
+
 	      /// МЕТОДЫ 
-	double distance(Point other)
+	double distance(const Point& other)const
 	{
 		/*double x_distance = this->x - other.x;
 		double y_distance = this->y - other.y;
@@ -66,7 +86,7 @@ public:
 	}
 };
 
-double distanse(Point A, Point B)
+   double distance(const Point& A,const Point& B)
 {
 	/*double x_distance = A.get_x() - B.get_x();
 	double y_distance = A.get_y() - B.get_y();
@@ -78,7 +98,7 @@ double distanse(Point A, Point B)
 //#define STRUCT_POINT
 //#define GET_SET_CHECK
 //#define DISTANCE_CHEK 
-#define CONSTRUCTOR_CHEK
+//#define CONSTRUCTOR_CHEK
 
 void main()
 {
@@ -113,14 +133,16 @@ void main()
 	Point B(7, 8);
 	A.print();
 	B.print();
+	cout << delimiter << endl;
 	cout << "Расстояние от точки 'А' до точки 'В':" << A.distance(B) << endl;
+	cout << delimiter << endl;
 	cout << "Расстояние от точки 'B' до точки 'A':" << B.distance(A) << endl;
+	cout << delimiter << endl;
 	cout << "Расстояние между точками 'А' и 'В':" << distance(A,B) << endl;
+	cout << delimiter << endl;
 	cout << "Расстояние между точками 'В' и 'А':" << distance(B,A) << endl;
-	
-
+	cout << delimiter << endl;	
 #endif // DISTANCE_CHEK
-
 
 #ifdef CONSTRUCTOR_CHEK
 	Point A;   // Конструктор по умолчанию
@@ -131,8 +153,18 @@ void main()
 
 	Point C(2, 3);
 	C.print();
+
+	Point D = C;  //CopyCopyconstructor
+	D.print();
+
+	Point E;     //DefaultConstructor
+	E = D;       //Assignment operator(CopyAssignment)
+	E.print();
 #endif // CONSTRUCTOR_CHEK
 
-
+	Point A, B, C;
+	cout << delimiter << endl;
+	A = B = C = Point(2, 3);
+	cout << delimiter << endl;
 
 }
