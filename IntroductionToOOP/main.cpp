@@ -3,6 +3,7 @@ using namespace std;
 
 #define tab "\t"
 
+
 class Point
 {
 	double x;
@@ -10,7 +11,6 @@ class Point
 public:
 	double get_x()const
 	{
-
 		return x;
 	}
 	double get_y()const
@@ -50,15 +50,35 @@ public:
 		cout << "Destructor:\t" << this << endl;
 	}
 
-	      /// МЕТОДЫ ///
+	      /// МЕТОДЫ 
+	double distance(Point other)
+	{
+		/*double x_distance = this->x - other.x;
+		double y_distance = this->y - other.y;
+		double distance = sqrt(x_distance * x_distance + y_distance * y_distance);
+		return distance;*/
+		return sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
+	}
+
 	void print()const
 	{
 		cout << "X = " << x << "\tY = "<< y << endl;
 	}
 };
 
+double distanse(Point A, Point B)
+{
+	/*double x_distance = A.get_x() - B.get_x();
+	double y_distance = A.get_y() - B.get_y();
+	double distance = sqrt(x_distance * x_distance + y_distance * y_distance);
+	return distance;*/
+	return sqrt(pow(A.get_x() - B.get_x(), 2) + pow(A.get_y() - B.get_y(), 2));
+}
+
 //#define STRUCT_POINT
 //#define GET_SET_CHECK
+//#define DISTANCE_CHEK 
+#define CONSTRUCTOR_CHEK
 
 void main()
 {
@@ -88,6 +108,21 @@ void main()
 	A.print();
 #endif // GET_SET_CHECK
 
+#ifdef DISTANCE_CHEK
+	Point A(2, 3);
+	Point B(7, 8);
+	A.print();
+	B.print();
+	cout << "Расстояние от точки 'А' до точки 'В':" << A.distance(B) << endl;
+	cout << "Расстояние от точки 'B' до точки 'A':" << B.distance(A) << endl;
+	cout << "Расстояние между точками 'А' и 'В':" << distance(A,B) << endl;
+	cout << "Расстояние между точками 'В' и 'А':" << distance(B,A) << endl;
+	
+
+#endif // DISTANCE_CHEK
+
+
+#ifdef CONSTRUCTOR_CHEK
 	Point A;   // Конструктор по умолчанию
 	A.print();
 
@@ -96,4 +131,8 @@ void main()
 
 	Point C(2, 3);
 	C.print();
+#endif // CONSTRUCTOR_CHEK
+
+
+
 }
