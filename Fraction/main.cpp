@@ -1,4 +1,4 @@
-#include<iostream>
+п»ї#include<iostream>
 using namespace std;
 
 #define delimitr "\n---------------------------------------------\n"
@@ -93,8 +93,16 @@ public:
 		integer++;
 		return *this;
 	}
+	Fraction& operator++(int)
+	{
+		Fraction old = *this;
+		integer++;
+		return old;
+	}
+	
 
-          //      Методы
+
+          //      РњРµС‚РѕРґС‹
     Fraction& to_improper()
     {
 	    numerator += integer * denominator;
@@ -182,11 +190,11 @@ void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef CONSTRUCTOR_CHEK
-	Fraction A;   //конструктор по умолчантю
+	Fraction A;   //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅС‚СЋ
 	cout << A << endl;
 
 	double b = 5;
-	Fraction B = 5;  //коструктор с одним параметром
+	Fraction B = 5;  //РєРѕСЃС‚СЂСѓРєС‚РѕСЂ СЃ РѕРґРЅРёРј РїР°СЂР°РјРµС‚СЂРѕРј
 	cout << B << endl;
 
 	Fraction C(2, 3);
