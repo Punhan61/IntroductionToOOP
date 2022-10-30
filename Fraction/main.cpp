@@ -1,7 +1,13 @@
 ﻿#include<iostream>
 using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 
 #define delimitr "\n---------------------------------------------\n"
+
+class Fraction;  //Объявления класса
+Fraction operator*(Fraction left, Fraction right);
 
 class Fraction
 {
@@ -21,14 +27,13 @@ public:
 	{
 		return denominator;
 	}
-
 	void set_integer(int integer)
 	{
 		this->integer = integer;
 	}
-	void set_numerator(int numenator)
+	void set_numerator(int numerator)
 	{
-		this->numerator = numenator;
+		this->numerator = numerator;
 	}
 	void set_denominator(int denominator)
 	{
@@ -36,7 +41,7 @@ public:
 		this->denominator = denominator;
 	}
 
-	//      constructor
+	//     Constructor
 	Fraction()
 	{
 		this->integer = 0;
@@ -44,13 +49,15 @@ public:
 		this->denominator = 1;
 		cout << "DefConstructor:\t" << this << endl;
 	}
+
 	Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
-		cout << "1ArgConstructor:\t" << this << endl;
+		cout << "1ArgConstructor:" << this << endl;
 	}
+
 	Fraction(int numerator, int denominator)
 	{
 		this->integer = 0;
@@ -59,7 +66,7 @@ public:
 		cout << "Constructor:\t" << this << endl;
 	}
 
-	Fraction(int integer, int numerator, int denominator)
+	Fraction(int integer,int numerator,int denominator)
 	{
 		this->integer = integer;
 		this->numerator = numerator;
@@ -71,13 +78,14 @@ public:
 		this->integer = other.integer;
 		this->numerator = other.numerator;
 		this->denominator = other.denominator;
-		cout << "CopyConstructor:\t" << this << endl;	
+		cout << "CopyConstructor:" << this << endl;
 	}
-
 	~Fraction()
 	{
 		cout << "Destructor:\t" << this << endl;
 	}
+
+	// Operators
 
 	Fraction& operator=(const Fraction& other)
 	{
@@ -87,28 +95,35 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
+	Fraction& operator*=(const Fraction& other)
+	{
+		return *this = *this * other;
+	}
+	Fraction& operator/=(Fraction& other)
+	{	
+		return *this = *this * other.inverted();
+	}
 
 	Fraction& operator++()
 	{
 		integer++;
 		return *this;
 	}
-	Fraction& operator++(int)
+
+	Fraction operator++(int)
 	{
 		Fraction old = *this;
 		integer++;
 		return old;
 	}
-	
 
-
-          //      Методы
-    Fraction& to_improper()
-    {
-	    numerator += integer * denominator;
-	    integer = 0;
+	//        Metods
+	Fraction& to_improper()
+	{
+		numerator += integer * denominator;
+		integer = 0;
 		return *this;
-    }
+	}
 	Fraction& to_proper()
 	{
 		integer = numerator / denominator;
@@ -121,13 +136,14 @@ public:
 		inverted.to_improper();
 		/*int buffer = inverted.numerator;
 		inverted.numerator = inverted.denominator;
-		inverted.denominator = buffer;
-		return buffer;*/
+		inverted.denominator = buffer;*/
 		swap(inverted.numerator, inverted.denominator);
 		return inverted;
 	}
+
 };
-//         Operators
+
+//            Operators
 ostream& operator<<(ostream& os, const Fraction& obj)
 {
 	if (obj.get_integer())os << obj.get_integer();
@@ -137,11 +153,10 @@ ostream& operator<<(ostream& os, const Fraction& obj)
 		os << obj.get_numerator() << "/" << obj.get_denominator();
 		if (obj.get_integer())os << ")";
 	}
-	else if (obj.get_integer() == 0) os << 0;
+	else if (obj.get_integer() == 0)os << 0;
 	return os;
 }
-
-Fraction operator*(Fraction left,Fraction right)
+Fraction operator*(Fraction left, Fraction right)
 {
 	left.to_improper();
 	right.to_improper();
@@ -151,9 +166,9 @@ Fraction operator*(Fraction left,Fraction right)
 	/*Fraction result
 	{
 		left.get_numerator() * right.get_numerator(),
-	    left.get_denominator()* right.get_denominator()
-	};
-	return result;*/	
+		left.get_denominator() * right.get_denominator()
+	};	
+	return result;*/
 	return Fraction
 	{
 		left.get_numerator() * right.get_numerator(),
@@ -168,8 +183,8 @@ Fraction operator/(const Fraction& left,const Fraction& right)
 	return Fraction
 	{
 		left.get_numerator() * right.get_denominator(),
-	    right.get_numerator()* left.get_denominator()
-	}.to_proper();*/
+		right.get_numerator() * left.get_denominator()
+	}.to_proper();	*/
 	return left * right.inverted();
 }
 
@@ -184,17 +199,38 @@ Fraction operator+(Fraction left, Fraction right)
 	}.to_proper();
 }
 
-//#define CONSTRUCTOR_CHEK
+Fraction operator-(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return Fraction
+	{
+		left.get_numerator() * right.get_denominator() - right.get_numerator() * left.get_denominator(),
+		left.get_denominator() * right.get_denominator()
+	}.to_proper();
+}
+// Comparison operators
+bool operator==(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return
+		left.get_numerator() * right.get_denominator() ==
+		right.get_numerator() * left.get_denominator();
+}
 
+//#define CONSTRUCTOR_CHEK
+//#define ARITHMETICAL_OPERATOR_CHEK
+//#define COMPOUND_ASSIGNMENT_CHECK
 void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef CONSTRUCTOR_CHEK
-	Fraction A;   //конструктор по умолчантю
+	Fraction A;
 	cout << A << endl;
 
 	double b = 5;
-	Fraction B = 5;  //коструктор с одним параметром
+	Fraction B = 5;
 	cout << B << endl;
 
 	Fraction C(2, 3);
@@ -204,21 +240,29 @@ void main()
 	cout << D << endl;
 #endif // CONSTRUCTOR_CHEK
 
+#ifdef ARITHMETICAL_OPERATOR_CHEK
 	Fraction A(1, 2, 3);
 	Fraction B(3, 4, 5);
 	Fraction C = A * B;
 	cout << C << endl;
 	cout << A / B << endl;
 	cout << A + B << endl;
-
-	for (double i = 0.25; i < 10; i++)
-	{
-		cout << i << "\t";
-	}
-	cout << endl;
+	cout << A - B << endl;
 	for (Fraction i(3, 4); i.get_integer() < 10; ++i)
 	{
 		cout << i << "\t";
 	}
 	cout << endl;
+#endif // ARITHMETICAL_OPERATOR_CHEK
+
+#ifdef COMPOUND_ASSIGNMENT_CHECK
+	Fraction A(1, 2, 3);
+	Fraction B(3, 4, 5);
+	A *= B;
+	cout << A << endl;
+	A /= B;
+	cout << A << endl;
+#endif // COMPOUND_ASSIGNMENT_CHECK
+
+	cout << (Fraction(1, 2) == Fraction(5, 10)) << endl;
 }
