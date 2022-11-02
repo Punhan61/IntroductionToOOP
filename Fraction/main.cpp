@@ -8,6 +8,8 @@ using std::endl;
 
 class Fraction;  //Объявления класса
 Fraction operator*(Fraction left, Fraction right);
+Fraction operator+(Fraction left, Fraction right);
+Fraction operator-(Fraction left, Fraction right);
 
 class Fraction
 {
@@ -95,13 +97,20 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
+
 	Fraction& operator*=(const Fraction& other)
 	{
 		return *this = *this * other;
 	}
-	Fraction& operator/=(Fraction& other)
-	{	
-		return *this = *this * other.inverted();
+
+	Fraction& operator+=(const Fraction& other)
+	{
+		return *this = *this + other;
+	}
+
+	Fraction& operator-=(const Fraction& other)
+	{
+		return *this = *this - other;
 	}
 
 	Fraction& operator++()
@@ -219,9 +228,44 @@ bool operator==(Fraction left, Fraction right)
 		right.get_numerator() * left.get_denominator();
 }
 
+bool operator!=(const Fraction& left, const Fraction& right)
+{
+	return !(left == right);
+}
+
+bool operator>(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return
+		left.get_numerator() * right.get_denominator() >
+		right.get_numerator() * left.get_denominator();
+}
+
+bool operator<(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return
+		left.get_numerator() * right.get_denominator() <
+		right.get_numerator() * left.get_denominator();
+}
+
+bool operator>=(const Fraction& left, const Fraction& right)
+{
+	return left > right || left == right;
+}
+
+bool operator!=(const Fraction& left, const Fraction& right)
+{
+	return !(left > right);
+}
+
 //#define CONSTRUCTOR_CHEK
 //#define ARITHMETICAL_OPERATOR_CHEK
 //#define COMPOUND_ASSIGNMENT_CHECK
+//#define COMPARISON_OPERATOR_CHEK
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -260,9 +304,19 @@ void main()
 	Fraction B(3, 4, 5);
 	A *= B;
 	cout << A << endl;
-	A /= B;
+
+	A += B;
 	cout << A << endl;
+
+	A -= B;
+	cout<< A << endl;
 #endif // COMPOUND_ASSIGNMENT_CHECK
 
-	cout << (Fraction(1, 2) == Fraction(5, 10)) << endl;
+#ifdef COMPARISON_OPERATOR_CHEK
+
+	cout << (Fraction(1, 2) < Fraction(5, 10)) << endl;
+
+#endif // COMPARISON_OPERATOR_CHEK
+
+	
 }
