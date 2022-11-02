@@ -52,12 +52,23 @@ public:
 		cout << "DefConstructor:\t" << this << endl;
 	}
 
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
 		cout << "1ArgConstructor:" << this << endl;
+	}
+
+	Fraction(double decimal)
+	{
+		integer = decimal;
+		decimal += 1e-10;
+		denominator = 1e+9;
+		numerator = (decimal - integer) * denominator;
+		reduce();
+		cout << "Double Constructor" << this << endl;
+
 	}
 
 	Fraction(int numerator, int denominator)
@@ -68,7 +79,7 @@ public:
 		cout << "Constructor:\t" << this << endl;
 	}
 
-	Fraction(int integer,int numerator,int denominator)
+	Fraction(int integer, int numerator, int denominator)
 	{
 		this->integer = integer;
 		this->numerator = numerator;
@@ -126,6 +137,18 @@ public:
 		return old;
 	}
 
+	//  Type cast operators
+
+	explicit operator int()const
+	{
+		return integer + numerator / denominator;
+	}
+	explicit operator double()const
+	{
+		return integer + (double)numerator / denominator;
+	}
+
+
 	//        Metods
 	Fraction& to_improper()
 	{
@@ -150,6 +173,24 @@ public:
 		return inverted;
 	}
 
+	Fraction& reduce()
+	{
+		if (numerator == 0)return *this;
+		int more, less, rest; //rest - остаток
+		if (numerator > denominator)more = numerator, less = denominator;
+		else less = numerator, more = denominator;
+		do
+		{
+			rest = more % less;
+			more = less;
+			less = rest;
+		} while (rest);
+		int GCD = more; // GCD-Greatest Common Divider(наибольший общий делитель)
+		numerator /= GCD;
+		denominator /= GCD;
+		return *this;
+	}
+	
 };
 
 //            Operators
@@ -256,15 +297,14 @@ bool operator>=(const Fraction& left, const Fraction& right)
 	return left > right || left == right;
 }
 
-bool operator!=(const Fraction& left, const Fraction& right)
-{
-	return !(left > right);
-}
 
 //#define CONSTRUCTOR_CHEK
 //#define ARITHMETICAL_OPERATOR_CHEK
 //#define COMPOUND_ASSIGNMENT_CHECK
 //#define COMPARISON_OPERATOR_CHEK
+//#define TYPE_CONVERSION_BASSICS
+//#define CONVERSION_FROM_OTHER_TO_CLASS
+#define CONVERSION_FROM_CLSSS_TO_OTHER_TYPE
 
 void main()
 {
@@ -318,5 +358,53 @@ void main()
 
 #endif // COMPARISON_OPERATOR_CHEK
 
-	
+#ifdef TYPE_CONVERSION_BASSICS
+	int a = 2;      //No conversiont
+	double b = 3;   //Conversion from less to more преоб-ие от меньшего к большему
+	int c = b;      //Conversion from more to less(with no data loss) преоб-ие от большего к меньшему без потери данных
+	int d = 2.5;    //Conversion from more to lass(with data loss) с потерей данных
+
+#endif // TYPE_CONVERSION_BASSICS
+
+#ifdef CONVERSION_FROM_OTHER_TO_CLASS
+					/*
+	1. From other to Class:
+		 Single-Argument constructor;
+		 Assignment operator;
+
+	2. From Class to other type;
+		 operator type()const
+		 {
+			.....;
+			conversion-algorithm;
+			.....;
+		 }
+	explicit
+
+	*/
+
+	Fraction A = Fraction(5);  //Conversion from int to fraction
+	cout << A << endl;
+	cout << delimitr << endl;
+	Fraction B;      //Default constructor
+	cout << delimitr << endl;
+	B = (Fraction)8;
+	cout << delimitr << endl;
+	cout << B << endl;
+#endif // CONVERSION_FROM_OTHER_TO_CLASS
+
+#ifdef CONVERSION_FROM_CLSSS_TO_OTHER_TYPE
+	Fraction A(2, 3, 4);
+	int a = (int)A;
+	cout << a << endl;
+
+	double b = (double)A;
+	cout << b << endl;
+
+	Fraction B = 2.8;
+	cout << B << endl;
+
+#endif // CONVERSION_FROM_CLSSS_TO_OTHER_TYPE
+
+
 }
