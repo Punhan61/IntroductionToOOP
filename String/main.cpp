@@ -1,14 +1,22 @@
-#include<iostream>
+п»ї#include<iostream>
 using namespace std;
 
 class String
 {
-	size_t size; //размер строки в байтах
-	char* str;   //указатель на строки в динамической памяти 
+	size_t size; //СЂР°Р·РјРµСЂ СЃС‚СЂРѕРєРё РІ Р±Р°Р№С‚Р°С…
+	char* str;   //СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂРѕРєРё РІ РґРёРЅР°РјРёС‡РµСЃРєРѕР№ РїР°РјСЏС‚Рё 
 public:
     const char* get_str()const
 	{
 		return str;
+	}
+	char* get_str()
+	{
+		return str;
+	}
+	size_t get_size()const
+	{
+		return size;
 	}
 
 	//     Constructor
@@ -56,9 +64,14 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
-	String& operator+(String& other)
+	
+	char operator[](int i)const// i - index
 	{
-		String newstr;
+		return str[i];
+	}
+	char& operator[](int i)// i - index
+	{
+		return str[i];
 	}
 
 	//       Metods
@@ -71,6 +84,19 @@ public:
 
 };
 
+String operator+(const String& left,const String& right)
+{
+	String cat(left.get_size() + right.get_size() - 1);
+	for (int i = 0; i < left.get_size(); i++)
+		cat[i] = left[i];
+		//cat.get_str()[i] = left.get_str()[i];
+	for (int i = 0; i < left.get_size(); i++)
+		cat[i + left.get_size() - 1] = right[i];
+		//cat.get_str()[i + left.get_size() - 1] = right.get_str()[i];
+	return cat;
+
+}
+
 ostream& operator<<(ostream& os, const String& obj)
 {
 	return os << obj.get_str();
@@ -82,7 +108,7 @@ void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef CONSTRUCTOR_CHEK
-	String str1;    //Пустая строка размеров 80 байт
+	String str1;    //РџСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР° СЂР°Р·РјРµСЂРѕРІ 80 Р±Р°Р№С‚
 	cout << str1 << endl;
 	str1.print();
 	cout << str1 << endl;
