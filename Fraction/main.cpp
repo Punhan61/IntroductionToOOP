@@ -1,4 +1,5 @@
-﻿#include<iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
 using namespace std;
 using std::cin;
 using std::cout;
@@ -206,6 +207,55 @@ ostream& operator<<(ostream& os, const Fraction& obj)
 	else if (obj.get_integer() == 0)os << 0;
 	return os;
 }
+istream& operator>>(istream& is, Fraction& obj)
+{
+	/*int integer, numerator, denominator;
+	is >> integer >> numerator >> denominator;
+	obj = Fraction(integer, numerator, denominator);*/
+	const int SIZE = 256;
+	char buffer[SIZE]{};
+	//is >> buffer;
+	is.getline(buffer, SIZE);
+	
+	char delimiters[] = "()/ ";
+	int number[3] = {};	//здесь будут храниться числа, извеченные из строки.
+
+	int n = 0;
+	/*for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
+	{
+		//pch - это указатель, который хранит адрес токена.
+		//токен - это часть строки, находящаяся между двумя разделителями
+		number[n++] = atoi(pch);
+//atoi(char* str);	//ASCII string to integer
+		//https://cplusplus.com/reference/cstdlib/atoi/
+	}*/
+	//https://cplusplus.com/reference/cstring/strtok/
+	char* pch = strtok(buffer, delimiters);
+	do
+	{
+		number[n++] = atoi(pch);//to_int_number
+		//atoi - ASCII string to Integer
+		if (n >= 3)break;
+	} while (pch = strtok(0, delimiters));
+
+	//for (int i = 0; i < n; i++)cout << number[i] << "\t";	cout << endl;
+	obj = Fraction();
+	switch (n)
+	{
+	case 1: obj.set_integer(number[0]); break;
+	case 2:
+		obj.set_numerator(number[0]);
+		obj.set_denominator(number[1]);
+		break;
+	case 3:
+		obj.set_integer(number[0]);
+		obj.set_numerator(number[1]);
+		obj.set_denominator(number[2]);
+	}
+
+	return is;
+}
+
 Fraction operator*(Fraction left, Fraction right)
 {
 	left.to_improper();
@@ -304,7 +354,7 @@ bool operator>=(const Fraction& left, const Fraction& right)
 //#define COMPARISON_OPERATOR_CHEK
 //#define TYPE_CONVERSION_BASSICS
 //#define CONVERSION_FROM_OTHER_TO_CLASS
-#define CONVERSION_FROM_CLSSS_TO_OTHER_TYPE
+//#define CONVERSION_FROM_CLSSS_TO_OTHER_TYPE
 
 void main()
 {
@@ -406,5 +456,7 @@ void main()
 
 #endif // CONVERSION_FROM_CLSSS_TO_OTHER_TYPE
 
-
+	Fraction A;
+	cout << "Введите простую дробь: "; cin >> A;
+	cout << A << endl;
 }

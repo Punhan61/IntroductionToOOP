@@ -4,7 +4,7 @@ using namespace std;
 class String
 {
 	size_t size; //размер строки в байтах
-	char* str;
+	char* str;   //указатель на строки в динамической памяти 
 public:
     const char* get_str()const
 	{
@@ -35,7 +35,7 @@ public:
 		this->size = other.size;
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
-		cout << "CopyConstructor:\t" << this << endl;
+		cout << "CopyConstructor:" << this << endl;
 	}
 
 	~String()
@@ -55,6 +55,10 @@ public:
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
+	}
+	String& operator+(String& other)
+	{
+		String newstr;
 	}
 
 	//       Metods
