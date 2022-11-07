@@ -1,5 +1,10 @@
 ﻿#include<iostream>
 using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
+class String;
+String operator+(const String& left, const String& right);
 
 class String
 {
@@ -32,18 +37,25 @@ public:
 		this->size = strlen(str) + 1;
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
-		{
 			this->str[i] = str[i];
-		}
 		cout << "Constructor:\t" << endl;
 	}
 
 	String(const String& other)
 	{
+		//Deep copy - побитовое копирование
 		this->size = other.size;
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
 		cout << "CopyConstructor:" << this << endl;
+	}
+	String(String&& other)
+	{
+		// Shallow copy:
+		this->size = other.size;
+		this->str = other.str;
+		other.str = nullptr;
+		cout << "MoveConstructor:" << this << endl;
 	}
 
 	~String()
@@ -64,7 +76,23 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
-	
+	String& operator=(String&& other)
+	{
+		if (this == &other)return *this;
+		delete[] this->str;
+		this->size = other.size;
+		this->str = other.str;
+		other.size = 0;
+		other.str = nullptr;
+		cout << "MoveAssignment:" << this << endl;
+		return *this;
+	}
+
+	String& operator+=(const String& other)
+	{
+		return *this = *this + other;
+	}
+
 	char operator[](int i)const// i - index
 	{
 		return str[i];
@@ -103,6 +131,7 @@ ostream& operator<<(ostream& os, const String& obj)
 }
 
 //#define CONSTRUCTOR_CHEK
+#define OPERATOR_PLUS_CHEK
 
 void main()
 {
@@ -128,9 +157,16 @@ void main()
 	cout << str5 << endl;
 #endif // CONSTRUCTOR_CHEK
 
+#ifdef OPERATOR_PLUS_CHEK
 	String str1 = "Hello";
 	String str2 = "World";
-	String str3 = str1 + str2;
-	cout << str3 << endl;
+	/*String str3;
+	str3 = str1 + str2;
+	cout << str3 << endl;*/
+	str1 += str2;
+	cout << str1 << endl;
+
+#endif // OPERATOR_PLUS_CHEK
+
 
 }
